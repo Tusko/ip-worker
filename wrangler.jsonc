@@ -4,21 +4,20 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "misty-salad-9736",
+	"name": "ip",
 	"main": "src/index.ts",
 	"compatibility_date": "2025-11-01",
-	"assets": {
-		"binding": "ASSETS",
-		"directory": "./public"
-	},
 	"observability": {
 		"enabled": true
+	},
+	"placement": { "mode": "smart" },
+	"vars": {
+		"DOMAIN": "ip.frontend.im"
 	}
 	/**
 	 * Smart Placement
 	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
 	 */
-	// "placement": { "mode": "smart" }
 	/**
 	 * Bindings
 	 * Bindings allow your Worker to interact with resources on the Cloudflare Developer Platform, including
