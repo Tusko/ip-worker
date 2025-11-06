@@ -37,6 +37,9 @@ function getRequestedFields(fieldsParam: string | undefined, availableData: Reco
       ipVersion: availableData.ipVersion,
       country: availableData.country,
       region: availableData.region,
+      asn: availableData.asn,
+      asOrganization: availableData.asOrganization,
+      userAgent: availableData.userAgent,
     }
   }
 
@@ -81,7 +84,10 @@ function getDocumentation() {
           ipv6: "IPv6 address (null if IPv4 connection)",
           ipVersion: "IP version (4 or 6)",
           country: "ISO 3166-1 alpha-2 country code",
-          region: "Region or state"
+          region: "Region or state",
+          asn: "Autonomous System Number",
+          asOrganization: "Organization name for the ASN",
+          userAgent: "User agent string from request headers"
         }
       },
       "/docs": {
@@ -162,6 +168,10 @@ function getDocumentation() {
       isEU: {
         type: "boolean",
         description: "Whether the request originated from EU"
+      },
+      userAgent: {
+        type: "string",
+        description: "User agent string from the request headers"
       }
     },
 
@@ -175,7 +185,10 @@ function getDocumentation() {
           ipv6: null,
           ipVersion: 4,
           country: "US",
-          region: "California"
+          region: "California",
+          asn: 15169,
+          asOrganization: "Google LLC",
+          userAgent: "Mozilla/5.0..."
         }
       },
       {
@@ -187,7 +200,10 @@ function getDocumentation() {
           ipv6: "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
           ipVersion: 6,
           country: "US",
-          region: "California"
+          region: "California",
+          asn: 15169,
+          asOrganization: "Google LLC",
+          userAgent: "Mozilla/5.0..."
         }
       },
       {
@@ -242,10 +258,14 @@ app.get('/', (c) => {
   // Get all available data from Cloudflare's request object
   const cfData = c.req.raw.cf || {}
 
+  // Extract user agent from request headers
+  const userAgent = c.req.header('user-agent') || null
+
   // Build complete available data object
   const availableData = {
     ...ipData,
     ...cfData,
+    userAgent: userAgent,
   }
 
   // Get only the requested fields based on query parameter
